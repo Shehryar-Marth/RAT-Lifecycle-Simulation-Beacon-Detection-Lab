@@ -1,0 +1,30 @@
+title: Fixed-Interval TCP Beaconing to Non-Standard Port
+id: 8f3c2a1e-4b7d-4e2a-9c1f-6d5e8a3b2c10
+status: experimental
+description: >
+  Detects repeated outbound TCP connections to the same destination
+  at a near-constant interval with fixed payload size — a common
+  RAT beaconing signature.
+author: Your Name
+date: 2025/01/01
+references:
+  - https://attack.mitre.org/techniques/T1071/
+tags:
+  - attack.command_and_control
+  - attack.t1071
+logsource:
+  category: network_connection
+  product: windows
+detection:
+  selection:
+    Initiated: 'true'
+    DestinationPort:
+      - 4444
+      - 1337
+      - 8080
+  timeframe: 5m
+  condition: selection | count() by DestinationIp > 5
+falsepositives:
+  - Legitimate health-check agents
+  - Software update pollers
+level: medium
